@@ -1,7 +1,8 @@
 class ChatService
-  attr_reader :message
+  attr_reader :message, :conversation
 
-  def initialize(message:)
+  def initialize(conversation:, message:)
+    @conversation = conversation
     @message = message
   end
 
@@ -10,17 +11,30 @@ class ChatService
       { role: "system", content: prompt}
     end
 
-    messages << { role: "user", content: message}
+    conversation.messages.each do |message|
+      messages << { role: message.role, content: message.content }
+    end
+
+    new_message = conversation.messages.create!(
+      role: "assistant",
+      content: ""
+    )
 
     response = client.chat(
       parameters: {
         model: "gpt-3.5-turbo",
         messages: messages,
         temperature: 0.3,
+        stream: proc do |chunk, _bytesize|
+          text = chunk.dig("choices", 0, "delta", "content")
+          if text.present?
+            new_message.content += text
+            new_message.save
+          end
+        end
       }
     )
-
-    response.dig("choices", 0, "message", "content")
+    true
   end
 
   private

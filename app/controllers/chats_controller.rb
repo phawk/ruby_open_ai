@@ -1,17 +1,18 @@
 class ChatsController < ApplicationController
   def create
-    service = ChatService.new(message: chat_params[:content])
-    response = service.call
-    render turbo_stream: turbo_stream.append(
-        "messages",
-        partial: "messages/message",
-        locals: { response: response }
-      )
+    conversation = Current.user.conversations.find(chat_params[:conversation_id])
+    message = conversation.messages.create!(
+      role: "user",
+      content: chat_params[:content]
+    )
+    ChatService.new(conversation: conversation, message: message).call
+
+    head :no_content
   end
 
   private
 
   def chat_params
-    params.permit(:content).merge(user: Current.user)
+    params.permit(:content, :conversation_id).merge(user: Current.user)
   end
 end

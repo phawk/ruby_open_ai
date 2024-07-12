@@ -3,11 +3,13 @@
 <div class="bg-gray-100 py-5 px-6 rounded-md">
   <%= form_with(url: chats_path) do |f| %>
     <div class="flex items-center justify-between">
+      <%= f.hidden_field :conversation_id, value: @conversation.id %>
       <%= f.text_field :content, placeholder: "Ask Jean Luc Picard a question?", class: "w-full rounded-md border border-gray-200" %>
       <%= f.submit "Post", class: "ml-4 bg-blue-500 rounded-md text-white px-3 py-2 cursor-pointer" %>
     </div>
   <% end %>
 </div>
 
+<%= turbo_stream_from @conversation %>
 <div id="messages">
 </div>

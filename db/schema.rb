@@ -10,10 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_18_143039) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_12_145841) do
+  create_table "conversations", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_conversations_on_user_id"
+  end
+
   create_table "email_verification_tokens", force: :cascade do |t|
     t.integer "user_id", null: false
     t.index ["user_id"], name: "index_email_verification_tokens_on_user_id"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.integer "conversation_id", null: false
+    t.string "role"
+    t.string "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
   end
 
   create_table "password_reset_tokens", force: :cascade do |t|
@@ -50,7 +66,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_18_143039) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "conversations", "users"
   add_foreign_key "email_verification_tokens", "users"
+  add_foreign_key "messages", "conversations"
   add_foreign_key "password_reset_tokens", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "sessions", "users"
