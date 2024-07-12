@@ -1,14 +1,13 @@
 <% set_meta_tags title: "Home" %>
 
 <div class="bg-gray-100 py-5 px-6 rounded-md">
-  <%= page_title("Rapid Ruby Starter") %>
-  <p class="my-2">
-    A starter rails template setup with some defaults and a few features to get you going.
-  </p>
+  <%= form_with(url: chats_path) do |f| %>
+    <div class="flex items-center justify-between">
+      <%= f.text_field :content, placeholder: "Ask Jean Luc Picard a question?", class: "w-full rounded-md border border-gray-200" %>
+      <%= f.submit "Post", class: "ml-4 bg-blue-500 rounded-md text-white px-3 py-2 cursor-pointer" %>
+    </div>
+  <% end %>
+</div>
 
-  <ul class="list-disc list-inside">
-    <li>Tailwind CSS, header, form styles</li>
-    <li>User authentication</li>
-    <li>RSpec</li>
-  </ul>
+<div id="messages">
 </div>

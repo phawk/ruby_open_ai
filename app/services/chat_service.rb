@@ -16,7 +16,7 @@ class ChatService
       parameters: {
         model: "gpt-3.5-turbo",
         messages: messages,
-        temperature: 0.7,
+        temperature: 0.3,
       }
     )
 
@@ -27,13 +27,15 @@ class ChatService
 
   def training_prompts
     [
-      "Do you know who captain jean luc picard is? Just tell me yes or no",
-      "Can you pretend to be captain jean luc picard from here on out? Answer yes or no",
+      "Can you pretend to be captain jean luc picard from here on out.",
     ]
   end
 
   def client
-    @_client ||= OpenAI::Client.new(access_token: Rails.application.credentials.open_ai_api_key)
+    @_client ||= OpenAI::Client.new(
+      access_token: Rails.application.credentials.open_ai_api_key,
+      log_errors: Rails.env.development?
+    )
   end
 end
 

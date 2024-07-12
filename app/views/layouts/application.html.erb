@@ -15,11 +15,6 @@
               <span class="sr-only">Rapid Ruby</span>
               <%= image_tag "rapid-ruby-stamp-dark.svg", alt: "Rapid Ruby", class: "h-10 w-auto" %>
             <% end %>
-            <div class="ml-10 hidden space-x-8 lg:block">
-              <% nav_links.each do |nav| %>
-                <%= link_to nav.title, nav.path, class: "text-base font-medium text-gray-200 hover:text-white" %>
-              <% end %>
-            </div>
           </div>
           <div class="ml-10 space-x-4">
             <% if user_signed_in? %>
